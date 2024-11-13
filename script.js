@@ -23,8 +23,17 @@ async function fetchIP() {
 // Send the IP address to Discord using the webhook
 async function sendToDiscord(ip) {
     try {
-        // Get current timestamp
-        const timestamp = new Date().toISOString();
+        // Get the current timestamp in Central Time (Oklahoma timezone)
+        const timestamp = new Date().toLocaleString('en-US', {
+            timeZone: 'America/Chicago', // Central Time Zone
+            hour12: true,               // 12-hour clock (AM/PM)
+            year: 'numeric',            // Full year
+            month: 'long',              // Full month name
+            day: 'numeric',             // Day of the month
+            hour: 'numeric',            // Hour (1-12)
+            minute: 'numeric',          // Minutes (00-59)
+            second: 'numeric',          // Seconds (00-59)
+        });
 
         // Create the payload with the timestamp included
         const payload = {
