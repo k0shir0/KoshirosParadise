@@ -3,12 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>kosgworld</title>
+    <title>Discord Webhook Username</title>
 </head>
 <body>
-    <h1>hello!!</h1>
-    <p>.</p>
-    
-    <script src="script.js"></script>
+    <h1>Submit Your Username</h1>
+    <form id="usernameForm">
+        <label for="username">Enter your username:</label>
+        <input type="text" id="username" name="username" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // Set the Discord webhook URL (replace with your actual webhook URL)
+        const webhookUrl = 'YOUR_DISCORD_WEBHOOK_URL';
+
+        // Handle form submission
+        document.getElementById('usernameForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the form from submitting the traditional way
+
+            // Get the username input value
+            const username = document.getElementById('username').value;
+
+            if (username) {
+                // Send a POST request to the Discord webhook
+                fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: `Username Submitted: ${username}`  // Discord message content
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Username sent successfully!');
+                    } else {
+                        alert('Failed to send username.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error sending username:', error);
+                    alert('Error sending username.');
+                });
+            } else {
+                alert('Please enter a username.');
+            }
+        });
+    </script>
 </body>
 </html>
