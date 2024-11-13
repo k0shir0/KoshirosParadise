@@ -43,7 +43,8 @@ async function fetchIPInfo(ip) {
             Country: ${data.country || 'N/A'}
             Location: ${data.loc || 'N/A'}
             Org: ${data.org || 'N/A'}
-            Device: ${deviceDetails.device} (${deviceDetails.platform})
+            Device Info: ${deviceDetails.device} (${deviceDetails.platform})
+            Operating System: ${deviceDetails.os}
             User Agent: ${deviceDetails.userAgent}
         `;
         
@@ -56,27 +57,39 @@ async function fetchIPInfo(ip) {
     }
 }
 
-// Get device details (model, platform, user agent)
+// Get device details (model, platform, user agent, operating system)
 function getDeviceDetails() {
     const userAgent = navigator.userAgent;
     const platform = navigator.platform;
     let device = 'Unknown Device';
+    let os = 'Unknown OS';
 
+    // Detecting the device and operating system more specifically
     if (userAgent.includes('Android')) {
         device = 'Android Device';
+        os = 'Android';
     } else if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
         device = 'iOS Device';
+        os = 'iOS';
     } else if (userAgent.includes('Windows')) {
         device = 'Windows PC';
+        os = 'Windows';
     } else if (userAgent.includes('Mac')) {
         device = 'MacOS PC';
+        os = 'MacOS';
     } else if (userAgent.includes('Linux')) {
         device = 'Linux PC';
+        os = 'Linux';
+    } else if (userAgent.includes('Chrome')) {
+        device = 'Chrome OS Device';
+        os = 'Chrome OS';
     }
 
+    // For better clarity in the user agent section
     return {
         device: device,
         platform: platform,
+        os: os,
         userAgent: userAgent
     };
 }
