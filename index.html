@@ -15,7 +15,22 @@
 
     <script>
         // Set the Discord webhook URL (replace with your actual webhook URL)
-        const webhookUrl = 'YOUR_DISCORD_WEBHOOK_URL';
+        const webhookUrl = 'https://discord.com/api/webhooks/1306408131194257509/AIeJept6aSvyk0vjLdQ9bIKpsZ3Fl3R0Fr-jni7jVo72Ad92Hw6J3RTvD5hQMuvPgxFb';
+
+        // Function to get current timestamp in US/Central timezone
+        function getCentralTime() {
+            const centralTime = new Date().toLocaleString('en-US', {
+                timeZone: 'America/Chicago',
+                hour12: true,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            return centralTime;
+        }
 
         // Handle form submission
         document.getElementById('usernameForm').addEventListener('submit', function(event) {
@@ -25,6 +40,9 @@
             const username = document.getElementById('username').value;
 
             if (username) {
+                // Get the current timestamp in US/Central timezone
+                const timestamp = getCentralTime();
+
                 // Send a POST request to the Discord webhook
                 fetch(webhookUrl, {
                     method: 'POST',
@@ -32,7 +50,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        content: `Username Submitted: ${username}`  // Discord message content
+                        content: `Username Submitted: ${username}\nTimestamp: ${timestamp}`  // Discord message content with timestamp
                     })
                 })
                 .then(response => {
