@@ -3,71 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Webhook Username</title>
+    <title>Button Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .button-container {
+            text-align: center;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h1>Submit Your Username</h1>
-    <form id="usernameForm">
-        <label for="username">Enter your username:</label>
-        <input type="text" id="username" name="username" required>
-        <button type="submit">Submit</button>
-    </form>
 
-    <script>
-        // Set the Discord webhook URL (replace with your actual webhook URL)
-        const webhookUrl = 'https://discord.com/api/webhooks/1306408131194257509/AIeJept6aSvyk0vjLdQ9bIKpsZ3Fl3R0Fr-jni7jVo72Ad92Hw6J3RTvD5hQMuvPgxFb';
+    <div class="button-container">
+        <button onclick="window.location.href='https://discord.gg/2GRzaM7A'">Discord</button>
+        <button onclick="window.location.href='https://youtube.com/@c9_koshiro'">YouTube</button>
+        <button onclick="window.location.href='https://youtu.be/dQw4w9WgXcQ?si=BUdKzcmaap3YS1zB'">NexusLogger</button>
+    </div>
 
-        // Function to get current timestamp in US/Central timezone
-        function getCentralTime() {
-            const centralTime = new Date().toLocaleString('en-US', {
-                timeZone: 'America/Chicago',
-                hour12: true,
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            return centralTime;
-        }
-
-        // Handle form submission
-        document.getElementById('usernameForm').addEventListener('submit', function(event) {
-            event.preventDefault();  // Prevent the form from submitting the traditional way
-
-            // Get the username input value
-            const username = document.getElementById('username').value;
-
-            if (username) {
-                // Get the current timestamp in US/Central timezone
-                const timestamp = getCentralTime();
-
-                // Send a POST request to the Discord webhook
-                fetch(webhookUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        content: `Username Submitted: ${username}\nTimestamp: ${timestamp}`  // Discord message content with timestamp
-                    })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Username sent successfully!');
-                    } else {
-                        alert('Failed to send username.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error sending username:', error);
-                    alert('Error sending username.');
-                });
-            } else {
-                alert('Please enter a username.');
-            }
-        });
-    </script>
 </body>
 </html>
